@@ -15,23 +15,25 @@ def upordown(key): # when pressing up or down
         if k == 'up':     # if user presses the up arrow key, then send a 1 to the server at the specified IP and PORT
    
             PORT = 5006
-            IP = "127.0.0.1"
-            MESSAGE = "1"
+            IP = "172.25.39.37"
+            MESSAGE = "U"
 
             print (MESSAGE)
-   
+            SMESSAGE = str.encode(MESSAGE)
+            print (SMESSAGE)
             sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock1.sendto(MESSAGE.encode(), (IP, PORT))
+            sock1.sendto(SMESSAGE.encode(), (IP, PORT))
 
         if k == 'down':        # if user presses the down arrow key, then send a 0 to the server at the specified IP and PORT
-            IP = "127.0.0.1"
+            IP = "172.25.39.37"
             PORT = 5006
-            MESSAGE = "0"
+            MESSAGE = "D"
     
             print (MESSAGE)
-   
+            print (SMESSAGE)
+            SMESSAGE = str.encode(MESSAGE)
             sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock1.sendto(MESSAGE.encode(), (IP, PORT))
+            sock1.sendto(SMESSAGE.encode(), (IP, PORT))
     return False
 
 # Define ball properties and functions
@@ -101,25 +103,11 @@ class Paddle:
         pos = self.canvas.coords(self.id)
         if pos[1] > 5:
             self.canvas.move(self.id, 0, -20)
-            PORT = 5006
-            IP = "127.0.0.1"
-            MESSAGE = "1"
-            print (MESSAGE)
-   
-            sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock1.sendto(MESSAGE.encode(), (IP, PORT))
-            
     def move_down(self, evt):
         pos = self.canvas.coords(self.id)
         if pos[3] < 400:
             self.canvas.move(self.id, 0, 20)
-            PORT = 5006
-            IP = "127.0.0.1"
-            MESSAGE = "0"
-            print (MESSAGE)
-   
-            sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock1.sendto(MESSAGE.encode(), (IP, PORT))
+
 
 class Paddle2:
     def __init__(self, canvas, color):
@@ -139,24 +127,24 @@ class Paddle2:
         if pos[1] > 15:
             self.canvas.move(self.id, 0, -20)
             PORT = 5006
-            IP = "127.0.0.1"
-            MESSAGE = "1"
+            IP = "172.25.39.37"
+            MESSAGE = "u"
             print (MESSAGE)
-   
+            SMESSAGE = str.encode(MESSAGE)
             sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock1.sendto(MESSAGE.encode(), (IP, PORT))
+            sock1.sendto(SMESSAGE, (IP, PORT))
            
     def move_down2(self, evt):
         pos = self.canvas.coords(self.id)
         if pos[3] < 400:
             self.canvas.move(self.id, 0, 20)
             PORT = 5006
-            IP = "127.0.0.1"
-            MESSAGE = "0"
+            IP = "172.25.39.37"
+            MESSAGE = "d"
             print (MESSAGE)
-   
+            SMESSAGE = str.encode(MESSAGE)
             sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock1.sendto(MESSAGE.encode(), (IP, PORT))
+            sock1.sendto(SMESSAGE, (IP, PORT))
 
 # Create window and canvas to draw on
 tk = Tk()
