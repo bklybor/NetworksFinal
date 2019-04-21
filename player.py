@@ -1,10 +1,9 @@
 class player(object):
     
-    def __init__(self, ip, port, id, username):
+    def __init__(self, ip, port, username):
         self.ip = ip
         self.port = port
-        self.id = id
-        self.userame = username
+        self.username = username
 
     def set_username(username):
         self.username = username
