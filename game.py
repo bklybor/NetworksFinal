@@ -16,14 +16,14 @@ class game(object):
         self.player2_score = 0
         self.is_loss = False
 
-    def move_up(player_id):
-        if player_id == player1:
-            player1_pos = player1_pos + 1
+    def move_up(self, player_id):
+        if player_id == self.player1:
+            self.player1_pos = self.player1_pos + 1
         else:
-            player2_pos = player2_pos + 1
+            self.player2_pos = self.player2_pos + 1
 
-    def move_down(player_id):
-        if player_id == player1:
-            player1_pos = player1_pos + 1
+    def move_down(self, player_id):
+        if player_id == self.player1:
+            self.player1_pos = self.player1_pos - 1
         else:
-            player2_pos = player2_pos + 1
+            self.player2_pos = self.player2_pos - 1

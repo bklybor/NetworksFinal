@@ -7,7 +7,7 @@ from game import game
 from threading import Thread
 import selectors
 
-host_ip = socket.gethostname()
+host_ip = "0.0.0.0"
  
 # selector = selectors.DefaultSelector()
 # the default listening port for incoming logon requests
@@ -97,6 +97,7 @@ def send_error(ip,port,msg):
 # retrieve information from port, send to correct game, lobby, etc.
 # format is "{2 Character message type}:field1,field2,field3,...."
 def direct_traffic(message, ip, port):
+    print(message)
     msg_type = message[:2]
     msg = message[3:]
     if msg_type == "LR": # logon request
@@ -117,18 +118,24 @@ def direct_traffic(message, ip, port):
                 p.set_username(username)
     elif msg_type == "SM": # send move
         print(msg_type)
-        game_id, user_id, move = msg.split(',')
-        game_found = false
-        for game in games_list:
-            if game.id == game_id:
+        game_id, move = msg.split(',')
+        print("move: ", move)
+        game_found = False
+        print(games_list[0].id)
+        for g in games_list:
+            print("game id: ", g.id)
+            if g.id == game_id:
+                print("game found")
                 if move == "u":
-                    game.move_up(user_id)
+                    print("moving up")
+                    g.move_up(ip)
                 elif move == "d":
-                    game.move_down(user_id)
+                    print("moving down")
+                    g.move_down(ip)
                 else:
+                    print("error")
                     send_error(ip,port,"Invalid move sent.")
-                game_found = true
-                break
+                game_found = True
         if not game_found:
             send_error(ip,port,"Game not found.")
     elif msg_type == "QR": # quit or rematch
@@ -142,6 +149,7 @@ def direct_traffic(message, ip, port):
         user_id = msg
     else:
         print(message)
+    return "done directing traffic"
 
 
 #def accept_wrapper(sock):
@@ -173,14 +181,16 @@ def direct_traffic(message, ip, port):
 # def add_player(ip, port):
 
 def send_game_update(gm, player1, player2):
+    print("yeet")
     message = "UG:{0},{1},{2},{3},{4},{5},{6},{7}".format(gm.id, gm.player1_pos, gm.player2_pos, gm.ball_x_pos, gm.ball_y_pos,  gm.player1_score, gm.player2_score, "0")
     smessage = str.encode(message)
-    #sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    #sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    #sock1.sendto(smessage, (player1.ip, player1.to_port))
-    #sock2.sendto(smessage, (player2.ip, player2.to_port))
-    #sock1.close()
-    #sock2.close()
+    print("preparing message()")
+    sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock1.sendto(smessage, (player1.ip, player1.to_port))
+    sock2.sendto(smessage, (player2.ip, player2.to_port))
+    sock1.close()
+    sock2.close()
     print(smessage)
 
 if __name__ == "__main__":
@@ -193,20 +203,21 @@ if __name__ == "__main__":
     #        else:
     #            service_connection(key, mask)
 
-    vinny = player("172.25.41.161", 10500, 5007 , "cuntzilla")
-    nick = player("172.25.42.173", 55433, 5008, "cuntasaurus")
+    vinny = player("172.25.46.133", 10500, 5007 , "cuntzilla")
+    nick = player("172.25.45.156", 55433, 5008, "cuntasaurus")
     gm = game(vinny.ip, nick.ip, "1")
 
     games_list.append(gm)
 
-    send_game_update(gm, vinny, nick)
+    # send_game_update(gm, vinny, nick)
 
     while True:
         try:
-            data, addr = UDP.recvfrom(4096) # buffer size is 1024 bytes
+            data, addr = lst_port.recvfrom(4096) # buffer size is 1024 bytes
             #addr, port = UDP.accept()
             t_addr, port = addr
             print ("received message:", data, " from ", t_addr, " : ", port)
-            direct_traffic(data.decode("utf-8"), t_addr, port)
+            print(direct_traffic(data.decode("utf-8"), t_addr, port))
+            send_game_update(gm, vinny, nick)
         except:
             continue
