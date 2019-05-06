@@ -44,7 +44,6 @@ class Paddle2:
        self.canvas.bind_all('<KeyPress-Down>', self.move_down2)
 
     def draw(self, x):
-        y = int(x)
         print ("Converted")
         pos = self.canvas.coords(0, 480, y)
         print ("coords updated")
@@ -85,6 +84,13 @@ sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 sock.bind((UDP_IP, UDP_PORT))
 sock.setblocking(0)
 holder = ["1","150","150","250","200","0","0",0]
+
+game_id = holder[0]
+p1_pos = int(holder[1])
+p2_pos = int(holder[2])
+ball_x_pos = int(holder[3])
+ball_y_pos = int(holder[4])
+
 isLoss = False
 toParse = ""
 # Animation loop
@@ -96,13 +102,17 @@ while isLoss != True:
         print (toParse)
         holder = toParse.split(",")
         print (holder)
+        p1_pos = int(holder[1]) - p1_pos
+        p2_pos = int(holder[2]) - p2_pos
+        ball_x_pos = int(holder[3]) - ball_x_pos
+        ball_y_pos = int(holder[4]) - ball_y_pos
     except:
         pass
     if holder[7] == "1":
         isLoss = True
-    paddle.draw(holder[1])
-    paddle2.draw(holder[2])
-    ball.draw(holder[3],holder[4])
+    paddle.draw(p1_pos)
+    paddle2.draw(p2_pos)
+    ball.draw(ball_x_pos, ball_y_pos)
     tk.update_idletasks()
     tk.update()
     time.sleep(0.01)

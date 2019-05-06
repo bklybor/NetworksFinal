@@ -18,12 +18,12 @@ class game(object):
 
     def move_up(self, player_id):
         if player_id == self.player1:
-            self.player1_pos = self.player1_pos + 1
+            self.player1_pos = self.player1_pos + 10
         else:
-            self.player2_pos = self.player2_pos + 1
+            self.player2_pos = self.player2_pos + 10
 
     def move_down(self, player_id):
         if player_id == self.player1:
-            self.player1_pos = self.player1_pos - 1
+            self.player1_pos = self.player1_pos - 10
         else:
-            self.player2_pos = self.player2_pos - 1
+            self.player2_pos = self.player2_pos - 10

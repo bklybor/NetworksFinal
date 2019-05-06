@@ -119,18 +119,16 @@ def direct_traffic(message, ip, port):
     elif msg_type == "SM": # send move
         print(msg_type)
         game_id, move = msg.split(',')
-        print("move: ", move)
         game_found = False
         print(games_list[0].id)
         for g in games_list:
-            print("game id: ", g.id)
             if g.id == game_id:
-                print("game found")
+                print("game_found()")
                 if move == "u":
-                    print("moving up")
+                    print(ip, " moving_up()")
                     g.move_up(ip)
                 elif move == "d":
-                    print("moving down")
+                    print(ip, " moving_down()")
                     g.move_down(ip)
                 else:
                     print("error")
@@ -149,7 +147,7 @@ def direct_traffic(message, ip, port):
         user_id = msg
     else:
         print(message)
-    return "done directing traffic"
+    return "done_directing_traffic()"
 
 
 #def accept_wrapper(sock):
@@ -181,17 +179,17 @@ def direct_traffic(message, ip, port):
 # def add_player(ip, port):
 
 def send_game_update(gm, player1, player2):
-    print("yeet")
+    print("preparing_message()")
     message = "UG:{0},{1},{2},{3},{4},{5},{6},{7}".format(gm.id, gm.player1_pos, gm.player2_pos, gm.ball_x_pos, gm.ball_y_pos,  gm.player1_score, gm.player2_score, "0")
     smessage = str.encode(message)
-    print("preparing message()")
     sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock1.sendto(smessage, (player1.ip, player1.to_port))
     sock2.sendto(smessage, (player2.ip, player2.to_port))
     sock1.close()
     sock2.close()
-    print(smessage)
+    print("game_state_update_sent()")
+    print(smessage, " sent to ", player1.ip, " and ", player2.ip)
 
 if __name__ == "__main__":
     # print(UDP.getsockname())
@@ -214,7 +212,7 @@ if __name__ == "__main__":
     while True:
         try:
             data, addr = lst_port.recvfrom(4096) # buffer size is 1024 bytes
-            #addr, port = UDP.accept()
+            # addr, port = UDP.accept()
             t_addr, port = addr
             print ("received message:", data, " from ", t_addr, " : ", port)
             print(direct_traffic(data.decode("utf-8"), t_addr, port))
