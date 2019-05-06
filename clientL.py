@@ -20,14 +20,6 @@ class Ball:
 class Paddle:
     def __init__(self, canvas, color):
         self.canvas = canvas
-        self.id = canvas.create_rectangle(0,0, 10, 100, fill=color) # player 2, your opponent!
-        self.yspeed = 0
-        self.canvas.move(self.id, 480, 150)        
-    def draw(self,x):
-        self.canvas.move(self.id,0,x)
-class Paddle2:
-    def __init__(self, canvas, color):
-        self.canvas = canvas
         self.id = canvas.create_rectangle(0,0, 10, 100, fill=color) 
         self.yspeed = 0
         self.canvas.move(self.id, 10, 150)
@@ -54,6 +46,14 @@ class Paddle2:
         sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock1.bind(('',5007))
         sock1.sendto(SMESSAGE, (IP, PORT))
+class Paddle2:
+    def __init__(self, canvas, color):
+        self.canvas = canvas
+        self.id = canvas.create_rectangle(0,0, 10, 100, fill=color) # player 2, your opponent!
+        self.yspeed = 0
+        self.canvas.move(self.id, 480, 150)        
+    def draw(self,x):
+        self.canvas.move(self.id,0,x)
 
 
 #Make background and declare colors and design
