@@ -4,7 +4,7 @@ from pynput import keyboard
 import time
 from player import player
 from game import game
-from threading import Thread
+from threading
 import selectors
 
 host_ip = "0.0.0.0"
@@ -180,14 +180,14 @@ def direct_traffic(message, ip, port):
 
 def send_game_update(gm, player1, player2):
     print("preparing_message()")
-    message = "UG:{0},{1},{2},{3},{4},{5},{6},{7}".format(gm.id, gm.player1_pos, gm.player2_pos, gm.ball_x_pos, gm.ball_y_pos,  gm.player1_score, gm.player2_score, "0")
+    message = "UG:{0},{1},{2},{3},{4},{5},{6},{7}".format(gm.id, gm.player1_y_pos, gm.player2_y_pos, gm.ball_x_pos, gm.ball_y_pos,  gm.player1_score, gm.player2_score, "0")
     smessage = str.encode(message)
-    sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock1.sendto(smessage, (player1.ip, player1.to_port))
-    sock2.sendto(smessage, (player2.ip, player2.to_port))
-    sock1.close()
-    sock2.close()
+    #sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    #sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    #sock1.sendto(smessage, (player1.ip, player1.to_port))
+    #sock2.sendto(smessage, (player2.ip, player2.to_port))
+    #sock1.close()
+    # sock2.close()
     print("game_state_update_sent()")
     print(smessage, " sent to ", player1.ip, " and ", player2.ip)
 
@@ -209,13 +209,19 @@ if __name__ == "__main__":
 
     # send_game_update(gm, vinny, nick)
 
+    start_time = time.time()
+    cur_time = 0.0
+    send_update = False
+
     while True:
+
         try:
             data, addr = lst_port.recvfrom(4096) # buffer size is 1024 bytes
             # addr, port = UDP.accept()
             t_addr, port = addr
             print ("received message:", data, " from ", t_addr, " : ", port)
             print(direct_traffic(data.decode("utf-8"), t_addr, port))
-            send_game_update(gm, vinny, nick)
         except:
-            continue
+            pass
+
+        send_game_update(gm, vinny, nick)
