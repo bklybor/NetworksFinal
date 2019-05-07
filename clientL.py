@@ -105,7 +105,7 @@ while is_loss == False:
         print("ballyspeed : ", ball_y_speed)
         ball_x_pos = int(toParse[3])
         ball_y_pos = int(toParse[4])
-        ball.draw(toParse[3],toParse[4])
+        ball.draw(ball_x_speed,ball_y_speed)
     except:
         pass
     if toParse[7] == "1":
