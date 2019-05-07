@@ -4,7 +4,7 @@ from pynput import keyboard
 import time
 from player import player
 from game import game
-from threading
+import threading
 import selectors
 
 host_ip = "0.0.0.0"
@@ -20,8 +20,8 @@ lst_port.setblocking(0)
 
 
 # (ip_address, port_num, player_username)
-# player1 = player("1.11", 1, "shiji's a bitch")
-# player2 = player("2.22", 2, "fuck you shinji, you whingeing bastard")
+# player1 = player("1.11", 1, "player 1")
+# player2 = player("2.22", 2, "player 2")
 # dictionary lookups faster than iterating through a list objects
 # probably going to use this instead of the object for storing information
 player_list = []
@@ -182,12 +182,12 @@ def send_game_update(gm, player1, player2):
     print("preparing_message()")
     message = "UG:{0},{1},{2},{3},{4},{5},{6},{7}".format(gm.id, gm.player1_y_pos, gm.player2_y_pos, gm.ball_x_pos, gm.ball_y_pos,  gm.player1_score, gm.player2_score, "0")
     smessage = str.encode(message)
-    #sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    #sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    #sock1.sendto(smessage, (player1.ip, player1.to_port))
-    #sock2.sendto(smessage, (player2.ip, player2.to_port))
-    #sock1.close()
-    # sock2.close()
+    sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock1.sendto(smessage, (player1.ip, player1.to_port))
+    sock2.sendto(smessage, (player2.ip, player2.to_port))
+    sock1.close()
+    sock2.close()
     print("game_state_update_sent()")
     print(smessage, " sent to ", player1.ip, " and ", player2.ip)
 
@@ -201,8 +201,8 @@ if __name__ == "__main__":
     #        else:
     #            service_connection(key, mask)
 
-    vinny = player("172.25.46.133", 10500, 5007 , "cuntzilla")
-    nick = player("172.25.45.156", 55433, 5008, "cuntasaurus")
+    vinny = player("172.25.23.161", 10500, 5007 , "player 1")
+    nick = player("172.25.45.119", 55433, 5008, "player 2")
     gm = game(vinny.ip, nick.ip, "1")
 
     games_list.append(gm)
@@ -211,7 +211,7 @@ if __name__ == "__main__":
 
     start_time = time.time()
     cur_time = 0.0
-    send_update = False
+    el_time = 0.0
 
     while True:
 
@@ -221,7 +221,15 @@ if __name__ == "__main__":
             t_addr, port = addr
             print ("received message:", data, " from ", t_addr, " : ", port)
             print(direct_traffic(data.decode("utf-8"), t_addr, port))
+            
         except:
             pass
 
+        #cur_time = time.time()
+        #el_time = cur_time - start_time
+        #print(el_time % 1)
+
+        gm.move_ball()
         send_game_update(gm, vinny, nick)
+        time.sleep(0.05)
+        
